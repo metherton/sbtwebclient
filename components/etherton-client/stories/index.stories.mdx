@@ -1,0 +1,55 @@
+import { Story, Preview, Meta, Props, html } from '@open-wc/demoing-storybook';
+
+import '../etherton-client.js';
+
+<Meta 
+  title="EthertonClient"
+  parameters={{
+    component: "etherton-client",
+    options: { selectedPanel: "storybookjs/knobs/panel" }
+  }}
+/>
+
+# EthertonClient
+
+A component for...
+
+## Features:
+
+- a
+- b
+- ...
+
+## How to use
+
+### Installation
+
+```bash
+yarn add etherton-client
+```
+
+```js
+import 'etherton-client/etherton-client.js';
+```
+
+<Preview withToolbar>
+  <Story name="Simple">
+    {html`
+      <etherton-client></etherton-client>
+    `}
+  </Story>
+</Preview>
+
+## API
+
+<Props of="etherton-client" />
+
+## Variations
+
+###### Custom Title
+
+<Story name="Custom Title">
+  {html`
+    <etherton-client .title=${'Hello World'}></etherton-client>
+  `}
+</Story>
