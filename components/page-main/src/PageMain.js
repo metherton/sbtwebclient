@@ -1,4 +1,5 @@
 import { html, css, LitElement } from 'lit-element';
+import { from } from 'rxjs';
 
 export class PageMain extends LitElement {
   static get styles() {
@@ -28,28 +29,69 @@ export class PageMain extends LitElement {
     return {
       title: { type: String },
       logo: { type: Function },
-      persons: { type: Array}
+      persons: { type: Array},
+      personsObserver: {type: Object}
     };
   }
 
   constructor() {
     super();
-    this.title = 'Hello open-wc world!';
-    this.logo = html``;
+    this.persons = [];
+  }
+
+  loadWithFetch() {
+    return from(fetch('http://localhost:8080/persons').then(r => r.json()).then(r => this.persons = r));
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-    fetch('http://localhost:8080/persons')
-      .then(r => r.json())
-      .then((r) => {
-        this.persons = r.map((person, i) => ({...person, id: i}) );
-      });
+    this.personsObserver = from(this.persons)
+    this.personsObserver.subscribe(this.render, e => console.log(e), () => console.log('complete'));
+
+    this.loadWithFetch();
+
+  }
+
+  async postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrer: 'no-referrer', // no-referrer, *client
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return await response.json(); // parses JSON response into native JavaScript objects
+  }
+
+  async addPerson() {
+    await this.executeAddPerson();
+    this.loadWithFetch();
+  }
+
+  async executeAddPerson() {
+    try {
+      const data = await (this.postData('http://localhost:8080/persons', { firstName: "Charles", surname: "Etherton" }));
+      console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
+
+    } catch (error) {
+      console.error(error);
+    }
+   // this.persons.push({firstName: "Charles"});
   }
 
   render() {
     return html`
+      <button @click=${this.addPerson}>
+        Add Person
+      </button>
       <div class="persons">
         ${this.persons.map(person => html`
           <div>${person.firstName}</div>`)}
