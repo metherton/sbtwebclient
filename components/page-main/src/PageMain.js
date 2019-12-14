@@ -92,10 +92,14 @@ export class PageMain extends LitElement {
       <button @click=${this.addPerson}>
         Add Person
       </button>
-      <div class="persons">
+      <table class="persons">
+        <tr><th>Surname</th><th>First Name</th></tr>
         ${this.persons.map(person => html`
-          <div>${person.firstName}</div>`)}
-      </div>
+          <tr>
+            <td>${person.surname}</td>
+            <td>${person.firstName}</td>
+          </tr>`)}
+      </table>
     `;
   }
 }
