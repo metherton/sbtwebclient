@@ -59,6 +59,7 @@ export class EthertonClient extends LitElement {
       }
 
       main {
+        width: 100%;
         flex-grow: 1;
       }
 

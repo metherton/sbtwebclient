@@ -5,9 +5,37 @@ export class PageMain extends LitElement {
   static get styles() {
     return css`
       :host {
+        width: 100%;
         display: block;
         padding: 25px;
         text-align: center;
+      }
+
+      thead {
+        border-bottom: 2px solid navy;
+      }
+
+      td, th {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+
+      td {
+        border-bottom: 1px solid silver;
+      }
+
+      thead.header tr {
+        background-color: #ededed;
+      }
+
+      tr:nth-child(odd) {
+        background-color: white;
+      }
+
+      table {
+        font-size: 0.5em;
+        width: 100%;
+        border-collapse: collapse;
       }
 
       svg {
@@ -78,7 +106,7 @@ export class PageMain extends LitElement {
 
   async executeAddPerson() {
     try {
-      const data = await (this.postData('http://localhost:8080/persons', { firstName: "Charles", surname: "Etherton" }));
+      const data = await (this.postData('http://localhost:8080/persons', { firstName: "Charles", surname: "Etherton", dateOfBirth: 1576348854, address: "1 High St", city: "London", country: "England" }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
@@ -93,11 +121,15 @@ export class PageMain extends LitElement {
         Add Person
       </button>
       <table class="persons">
-        <tr><th>Surname</th><th>First Name</th></tr>
+        <thead class="header"><th>Surname</th><th>First Name</th><th>Date of Birth</th><th>Address</th><th>City</th><th>Country</th></thead>
         ${this.persons.map(person => html`
           <tr>
             <td>${person.surname}</td>
             <td>${person.firstName}</td>
+            <td>${person.dateOfBirth}</td>
+            <td>${person.address}</td>
+            <td>${person.city}</td>
+            <td>${person.country}</td>
           </tr>`)}
       </table>
     `;
