@@ -36,6 +36,7 @@ export class PageMain extends LitElement {
         font-size: 0.5em;
         width: 100%;
         border-collapse: collapse;
+        margin-top: 30px;
       }
 
       svg {
@@ -50,6 +51,64 @@ export class PageMain extends LitElement {
           transform: rotate(360deg);
         }
       }
+
+      #modal-btn {
+        cursor: pointer;
+        font-size: 20px;
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid black;
+        line-height: 16px;
+        text-align: center;
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal-content {
+        position: relative;
+        background-color: white;
+        padding: 20px;
+        margin: auto;
+        width: 75%;
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+      }
+      .close-btn {
+        cursor: pointer;
+        float: right;
+        color: lightgray;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .close-btn:hover {
+        color: darkgray;
+      }
+      @-webkit-keyframes animatetop {
+        from {top:-300px; opacity:0}
+        to {top:0; opacity:1}
+      }
+      @keyframes animatetop {
+        from {top:-300px; opacity:0}
+        to {top:0; opacity:1}
+      }
+
+
     `;
   }
 
@@ -58,14 +117,34 @@ export class PageMain extends LitElement {
       title: { type: String },
       logo: { type: Function },
       persons: { type: Array},
-      personsObserver: {type: Object}
+      personsObserver: {type: Object},
+      firstName: {type: String},
+      surname: {type: String},
+      dateOfBirth: {type: Number},
+      address: {type: String},
+      city: {type: String},
+      country: {type: String},
+      bla: {type: String}
     };
   }
 
   constructor() {
     super();
     this.persons = [];
+    this.firstName = '';
+    this.surname = '';
+    this.dateOfBirth = 1576348854;
+    this.address = '';
+    this.city = '';
+    this.country = '';
+    this.bla = '';
   }
+
+//  set firstName(value) {
+//    const oldValue = this.firstName;
+//    // Implement setter logic here...
+//    this.requestUpdate('firstName', oldValue);
+//  }
 
   loadWithFetch() {
     return from(fetch('http://www.martinetherton.com:8080/persons').then(r => r.json()).then(r => this.persons = r));
@@ -78,8 +157,28 @@ export class PageMain extends LitElement {
     this.personsObserver.subscribe(this.render, e => console.log(e), () => console.log('complete'));
 
     this.loadWithFetch();
-
   }
+
+  // called the first time your element has been rendered, can be useful when you need
+  // to access your DOM elements
+  // changedProperties is a Map
+  firstUpdated(changedProperties) {
+    let modalBtn = this.shadowRoot.querySelector("#modal-btn")
+    let modal = this.shadowRoot.querySelector(".modal")
+    let closeBtn = this.shadowRoot.querySelector(".close-btn")
+    modalBtn.onclick = function(){
+      modal.style.display = "block"
+    }
+    closeBtn.onclick = function(){
+      modal.style.display = "none"
+    }
+    window.onclick = function(e){
+      if(e.target == modal){
+        modal.style.display = "none"
+      }
+    }
+  }
+
 
   async postData(url = '', data = {}) {
     // Default options are marked with *
@@ -100,19 +199,22 @@ export class PageMain extends LitElement {
   }
 
   async addPerson() {
-    await this.executeAddPerson();
-    this.loadWithFetch();
+
+
+//    await this.executeAddPerson();
+//    this.loadWithFetch();
   }
 
   async executeAddPerson() {
     try {
-      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: "Charles", surname: "Etherton", dateOfBirth: 1576348854, address: "1 High St", city: "London", country: "England" }));
+      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: this.dateOfBirth, address: this.address, city: this.city, country: this.country }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
       console.error(error);
     }
    // this.persons.push({firstName: "Charles"});
+    this.shadowRoot.querySelector(".close-btn").click();
   }
 
   timestampAsDate(timestamp) {
@@ -120,11 +222,36 @@ export class PageMain extends LitElement {
     return date.toDateString();
   }
 
+  async clickHandler(e) {
+    console.log(e.target);
+    await this.executeAddPerson();
+    this.loadWithFetch();
+  }
+
+  updateFirstName(e) {
+
+    this.firstName = e.target.value;
+  }
+
   render() {
     return html`
-      <button @click=${this.addPerson}>
-        Add Person
-      </button>
+      <span @click=${this.addPerson} id="modal-btn">+</span>
+      <div id="addPerson" class="modal">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
+          <p>this is the text inside the modal</p>
+          <input @blur="${this.updateFirstName}" type="text" .value="${this.firstName}"/>
+          <input type="text" .value="${this.surname}"/>
+          <input type="text" .value="${this.dateOfBirth}"/>
+          <input type="text" .value="${this.address}"/>
+          <input type="text" .value="${this.city}"/>
+          <input type="text" .value="${this.country}"/>
+        </div>
+        <div>event handler binding
+          <button @click="${this.clickHandler}">click</button>
+        </div>
+      </div>
+      <input type="text" .value="${this.bla}" />
       <table class="persons">
         <thead class="header"><th>Surname</th><th>First Name</th><th>Date of Birth</th><th>Address</th><th>City</th><th>Country</th></thead>
         ${this.persons.map(person => html`
