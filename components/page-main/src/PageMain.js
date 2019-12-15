@@ -68,7 +68,7 @@ export class PageMain extends LitElement {
   }
 
   loadWithFetch() {
-    return from(fetch('http://localhost:8080/persons').then(r => r.json()).then(r => this.persons = r));
+    return from(fetch('http://www.martinetherton.com:8080/persons').then(r => r.json()).then(r => this.persons = r));
   }
 
   connectedCallback() {
@@ -106,13 +106,18 @@ export class PageMain extends LitElement {
 
   async executeAddPerson() {
     try {
-      const data = await (this.postData('http://localhost:8080/persons', { firstName: "Charles", surname: "Etherton", dateOfBirth: 1576348854, address: "1 High St", city: "London", country: "England" }));
+      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: "Charles", surname: "Etherton", dateOfBirth: 1576348854, address: "1 High St", city: "London", country: "England" }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
       console.error(error);
     }
    // this.persons.push({firstName: "Charles"});
+  }
+
+  timestampAsDate(timestamp) {
+    let date = new Date(timestamp);
+    return date.toDateString();
   }
 
   render() {
@@ -126,7 +131,7 @@ export class PageMain extends LitElement {
           <tr>
             <td>${person.surname}</td>
             <td>${person.firstName}</td>
-            <td>${person.dateOfBirth}</td>
+            <td>${this.timestampAsDate(person.dateOfBirth)}</td>
             <td>${person.address}</td>
             <td>${person.city}</td>
             <td>${person.country}</td>
