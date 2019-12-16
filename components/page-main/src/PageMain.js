@@ -205,7 +205,7 @@ export class PageMain extends LitElement {
   async executeAddPerson() {
 
     try {
-      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: this.dateOfBirth, address: this.address, city: this.city, country: this.country }));
+      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: Date.parse(this.dateOfBirth), address: this.address, city: this.city, country: this.country }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
@@ -258,16 +258,16 @@ export class PageMain extends LitElement {
       <div id="addPerson" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
-          <p>this is the text inside the modal</p>
-          <input id="firstName" @change="${this.updateField}" type="text" .value="${this.firstName}"/>
-          <input id="surname" @change="${this.updateField}" type="text" .value="${this.surname}"/>
-          <input id="dateOfBirth" @change="${this.updateField}" type="text" .value="${this.dateOfBirth}"/>
-          <input id="address" @change="${this.updateField}" type="text" .value="${this.address}"/>
-          <input id="city" @change="${this.updateField}" type="text" .value="${this.city}"/>
-          <input id="country" @change="${this.updateField}" type="text" .value="${this.country}"/>
-        </div>
-        <div>event handler binding
-          <button @click="${this.clickHandler}">click</button>
+          <p>Add a new person</p>
+          <label for="firstName">First Name:</label><input id="firstName" @change="${this.updateField}" type="text" .value="${this.firstName}"/>
+          <label for="surname">Surname:</label><input id="surname" @change="${this.updateField}" type="text" .value="${this.surname}"/>
+          <label for="dateOfBirth">Date of Birth:</label><input id="dateOfBirth" @change="${this.updateField}" type="date" .value="${this.dateOfBirth}"/>
+          <label for="address">Address:</label><input id="address" @change="${this.updateField}" type="text" .value="${this.address}"/>
+          <label for="city">City:</label><input id="city" @change="${this.updateField}" type="text" .value="${this.city}"/>
+          <label for="country">Country:</label><input id="country" @change="${this.updateField}" type="text" .value="${this.country}"/>
+          <div>event handler binding
+            <button @click="${this.clickHandler}">click</button>
+          </div>
         </div>
       </div>
       <table class="persons">
