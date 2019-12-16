@@ -32,6 +32,10 @@ export class PageMain extends LitElement {
         background-color: white;
       }
 
+      button {
+        font-size: 1.0em;
+      }
+
       table {
         font-size: 0.5em;
         width: 100%;
@@ -68,6 +72,7 @@ export class PageMain extends LitElement {
       }
 
       .modal {
+        font-size: 0.8em;
         display: none;
         position: fixed;
         padding-top: 50px;
@@ -75,8 +80,7 @@ export class PageMain extends LitElement {
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: #ededed;
       }
       .modal-content {
         position: relative;
@@ -107,6 +111,17 @@ export class PageMain extends LitElement {
         from {top:-300px; opacity:0}
         to {top:0; opacity:1}
       }
+      .flex-container {
+        display: flex;
+      }
+      .flex-container > div {
+        margin: 10px;
+        padding: 20px;
+        min-width: 250px;
+      }
+      input {
+        font-size: 0.8em;
+      }
     `;
   }
 
@@ -136,12 +151,6 @@ export class PageMain extends LitElement {
     this.city = '';
     this.country = '';
   }
-
-//  set firstName(value) {
-//    const oldValue = this.firstName;
-//    // Implement setter logic here...
-//    this.requestUpdate('firstName', oldValue);
-//  }
 
   loadWithFetch() {
     return from(fetch('http://www.martinetherton.com:8080/persons').then(r => r.json()).then(r => this.persons = r));
@@ -193,13 +202,6 @@ export class PageMain extends LitElement {
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     return await response.json(); // parses JSON response into native JavaScript objects
-  }
-
-  async addPerson() {
-
-
-//    await this.executeAddPerson();
-//    this.loadWithFetch();
   }
 
   async executeAddPerson() {
@@ -258,15 +260,21 @@ export class PageMain extends LitElement {
       <div id="addPerson" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
-          <p>Add a new person</p>
-          <label for="firstName">First Name:</label><input id="firstName" @change="${this.updateField}" type="text" .value="${this.firstName}"/>
-          <label for="surname">Surname:</label><input id="surname" @change="${this.updateField}" type="text" .value="${this.surname}"/>
-          <label for="dateOfBirth">Date of Birth:</label><input id="dateOfBirth" @change="${this.updateField}" type="date" .value="${this.dateOfBirth}"/>
-          <label for="address">Address:</label><input id="address" @change="${this.updateField}" type="text" .value="${this.address}"/>
-          <label for="city">City:</label><input id="city" @change="${this.updateField}" type="text" .value="${this.city}"/>
-          <label for="country">Country:</label><input id="country" @change="${this.updateField}" type="text" .value="${this.country}"/>
-          <div>event handler binding
-            <button @click="${this.clickHandler}">click</button>
+          <h3>Add a new person</h3>
+          <br />
+          <div class="flex-container">
+            <div><label for="firstName">First Name:</label>&nbsp;<input id="firstName" @change="${this.updateField}" type="text" .value="${this.firstName}"/></div>
+            <div><label for="surname">Surname:</label>&nbsp;<input id="surname" @change="${this.updateField}" type="text" .value="${this.surname}"/></div>
+            <div><label for="dateOfBirth">Date of Birth:</label>&nbsp;<input id="dateOfBirth" @change="${this.updateField}" type="date" .value="${this.dateOfBirth}"/></div>
+          </div>
+          <div class="flex-container">
+            <div><label for="address">Address:</label>&nbsp;<input id="address" @change="${this.updateField}" type="text" .value="${this.address}"/></div>
+            <div><label for="city">City:</label>&nbsp;<input id="city" @change="${this.updateField}" type="text" .value="${this.city}"/></div>
+            <div><label for="country">Country:</label>&nbsp;<input id="country" @change="${this.updateField}" type="text" .value="${this.country}"/></div>
+          </div>
+          <br />
+          <div>
+            <button @click="${this.clickHandler}">Submit</button>
           </div>
         </div>
       </div>
