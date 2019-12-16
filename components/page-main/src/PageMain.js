@@ -107,8 +107,6 @@ export class PageMain extends LitElement {
         from {top:-300px; opacity:0}
         to {top:0; opacity:1}
       }
-
-
     `;
   }
 
@@ -137,7 +135,6 @@ export class PageMain extends LitElement {
     this.address = '';
     this.city = '';
     this.country = '';
-    this.bla = '';
   }
 
 //  set firstName(value) {
@@ -206,6 +203,7 @@ export class PageMain extends LitElement {
   }
 
   async executeAddPerson() {
+
     try {
       const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: this.dateOfBirth, address: this.address, city: this.city, country: this.country }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
@@ -228,9 +226,30 @@ export class PageMain extends LitElement {
     this.loadWithFetch();
   }
 
-  updateFirstName(e) {
-
-    this.firstName = e.target.value;
+  updateField(e) {
+    switch(e.target.id) {
+      case "firstName":
+        this.firstName = e.target.value;
+        break;
+      case "surname":
+        this.surname = e.target.value;
+        break;
+      case "dateOfBirth":
+        this.dateOfBirth = e.target.value;
+        break;
+      case "address":
+        this.address = e.target.value;
+        break;
+      case "city":
+        this.city = e.target.value;
+        break;
+      case "country":
+        this.country = e.target.value;
+        break;
+      default:
+        console.log(e.target.id);
+        break;
+    }
   }
 
   render() {
@@ -240,18 +259,17 @@ export class PageMain extends LitElement {
         <div class="modal-content">
           <span class="close-btn">&times;</span>
           <p>this is the text inside the modal</p>
-          <input @blur="${this.updateFirstName}" type="text" .value="${this.firstName}"/>
-          <input type="text" .value="${this.surname}"/>
-          <input type="text" .value="${this.dateOfBirth}"/>
-          <input type="text" .value="${this.address}"/>
-          <input type="text" .value="${this.city}"/>
-          <input type="text" .value="${this.country}"/>
+          <input id="firstName" @change="${this.updateField}" type="text" .value="${this.firstName}"/>
+          <input id="surname" @change="${this.updateField}" type="text" .value="${this.surname}"/>
+          <input id="dateOfBirth" @change="${this.updateField}" type="text" .value="${this.dateOfBirth}"/>
+          <input id="address" @change="${this.updateField}" type="text" .value="${this.address}"/>
+          <input id="city" @change="${this.updateField}" type="text" .value="${this.city}"/>
+          <input id="country" @change="${this.updateField}" type="text" .value="${this.country}"/>
         </div>
         <div>event handler binding
           <button @click="${this.clickHandler}">click</button>
         </div>
       </div>
-      <input type="text" .value="${this.bla}" />
       <table class="persons">
         <thead class="header"><th>Surname</th><th>First Name</th><th>Date of Birth</th><th>Address</th><th>City</th><th>Country</th></thead>
         ${this.persons.map(person => html`
