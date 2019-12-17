@@ -80,11 +80,11 @@ export class PageMain extends LitElement {
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: #ededed;
+
       }
       .modal-content {
+        background-color: lightgoldenrodyellow;
         position: relative;
-        background-color: white;
         padding: 20px;
         margin: auto;
         width: 75%;
