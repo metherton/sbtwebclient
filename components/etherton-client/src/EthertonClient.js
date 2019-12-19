@@ -89,7 +89,7 @@ export class EthertonClient extends LitElement {
             </a>
           </li>
           <li>
-            <a href="#pageOne" class=${this.__navClass('pageOne')} @click=${this.__onNavClicked}>
+              <a href="#pageOne" class=${this.__navClass('pageOne')} @click=${this.__onNavClicked}>
               Page One
             </a>
           </li>

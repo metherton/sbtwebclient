@@ -32,6 +32,19 @@ export class PageMain extends LitElement {
         background-color: white;
       }
 
+      div.person {
+        text-align: left;
+        font-size: 0.8em;
+      }
+
+      div.person:nth-child(odd) {
+        background-color: ghostwhite;
+      }
+
+      div.person:nth-child(even) {
+        background-color: gainsboro;
+      }
+
       button {
         font-size: 1.0em;
       }
@@ -153,7 +166,7 @@ export class PageMain extends LitElement {
   }
 
   loadWithFetch() {
-    return from(fetch('http://www.martinetherton.com:8080/persons').then(r => r.json()).then(r => this.persons = r));
+    return from(fetch('http://localhost:8080/persons').then(r => r.json()).then(r => this.persons = r));
   }
 
   connectedCallback() {
@@ -207,7 +220,7 @@ export class PageMain extends LitElement {
   async executeAddPerson() {
 
     try {
-      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: Date.parse(this.dateOfBirth), address: this.address, city: this.city, country: this.country }));
+      const data = await (this.postData('http://localhost:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: Date.parse(this.dateOfBirth), address: this.address, city: this.city, country: this.country }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
@@ -278,18 +291,19 @@ export class PageMain extends LitElement {
           </div>
         </div>
       </div>
-      <table class="persons">
-        <thead class="header"><th>Surname</th><th>First Name</th><th>Date of Birth</th><th>Address</th><th>City</th><th>Country</th></thead>
-        ${this.persons.map(person => html`
-          <tr>
-            <td>${person.surname}</td>
-            <td>${person.firstName}</td>
-            <td>${this.timestampAsDate(person.dateOfBirth)}</td>
-            <td>${person.address}</td>
-            <td>${person.city}</td>
-            <td>${person.country}</td>
-          </tr>`)}
-      </table>
+
+      <div style="display:flex;flex-direction:column;font-size:0.8em;">
+              ${this.persons.map(person => html`
+                  <div class="person">
+                    <div style="padding: 0.5em">England & Wales Civil Registration Birth 1836-1987</div>
+                    <div style="padding-left:3em;padding-top: 1em;padding-bottom:1em;">
+                      <div style="padding: 0.5em;">Name: ${person.firstName}&nbsp;${person.surname}</div>
+                      <div style="padding: 0.5em">Birth: ${person.dateOfBirth}&nbsp;,&nbsp;${person.city}&nbsp;,&nbsp;${person.country}
+                    <div>
+                  </div>
+
+                `)}
+      </div>
     `;
   }
 }
