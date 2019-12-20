@@ -269,7 +269,7 @@ export class PageMain extends LitElement {
 
   render() {
     return html`
-      <span @click=${this.addPerson} id="modal-btn">+</span>
+      <span @click=${this.addPerson} id="modal-btn">+</span><br />
       <div id="addPerson" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
@@ -298,7 +298,7 @@ export class PageMain extends LitElement {
                     <div style="padding: 0.5em">England & Wales Civil Registration Birth 1836-1987</div>
                     <div style="padding-left:3em;padding-top: 1em;padding-bottom:1em;">
                       <div style="padding: 0.5em;">Name: ${person.firstName}&nbsp;${person.surname}</div>
-                      <div style="padding: 0.5em">Birth: ${person.dateOfBirth}&nbsp;,&nbsp;${person.city}&nbsp;,&nbsp;${person.country}
+                      <div style="padding: 0.5em">Birth: ${this.timestampAsDate(person.dateOfBirth)}&nbsp;,&nbsp;${person.city}&nbsp;,&nbsp;${person.country}
                     <div>
                   </div>
 
