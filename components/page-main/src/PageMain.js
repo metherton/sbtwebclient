@@ -34,7 +34,7 @@ export class PageMain extends LitElement {
 
       div.person {
         text-align: left;
-        font-size: 0.8em;
+          font-size: 1.2em;
       }
 
       div.person:nth-child(odd) {
@@ -166,7 +166,7 @@ export class PageMain extends LitElement {
   }
 
   loadWithFetch() {
-    return from(fetch('http://localhost:8080/persons').then(r => r.json()).then(r => this.persons = r));
+    return from(fetch('http://www.martinetherton.com:8080/persons').then(r => r.json()).then(r => this.persons = r));
   }
 
   connectedCallback() {
@@ -220,7 +220,7 @@ export class PageMain extends LitElement {
   async executeAddPerson() {
 
     try {
-      const data = await (this.postData('http://localhost:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: Date.parse(this.dateOfBirth), address: this.address, city: this.city, country: this.country }));
+      const data = await (this.postData('http://www.martinetherton.com:8080/persons', { firstName: this.firstName, surname: this.surname, dateOfBirth: Date.parse(this.dateOfBirth), address: this.address, city: this.city, country: this.country }));
       console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
 
     } catch (error) {
@@ -298,12 +298,10 @@ export class PageMain extends LitElement {
                     <div style="padding: 0.5em">England & Wales Civil Registration Birth 1836-1987</div>
                     <div style="padding-left:3em;padding-top: 1em;padding-bottom:1em;">
                       <div style="padding: 0.5em;">Name: ${person.firstName}&nbsp;${person.surname}</div>
-                      <div style="padding: 0.5em">Birth: ${this.timestampAsDate(person.dateOfBirth)}&nbsp;,&nbsp;${person.city}&nbsp;,&nbsp;${person.country}
-                    <div>
+                      <div style="padding: 0.5em">Birth: ${this.timestampAsDate(person.dateOfBirth)}&nbsp;,&nbsp;${person.city}&nbsp;,&nbsp;${person.country}</div>
+                    </div>
                   </div>
-
                 `)}
-      </div>
-    `;
+      </div>`;
   }
 }
